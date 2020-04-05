@@ -7,8 +7,8 @@
     "test": "DEBUG=authless* mocha",
     "test:coverage": "nyc --reporter=lcov npm test"
   },
-  "author": "",
   "license": "ISC",
+  "author": "",
   "dependencies": {
     "@authless/core": "^1.0.2",
     "axios": "^0.19.0",
