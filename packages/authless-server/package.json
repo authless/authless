@@ -1,6 +1,6 @@
 {
   "name": "@authless/server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A browserless authentication and service management framework",
   "main": "src/index.js",
   "scripts": {
