@@ -103,16 +103,16 @@ const getJsonResponse = async (account, page, response, responses) => {
   return result;
 }
 
-const redis = new Redis({
-  port: process.env.REDIS_PORT || 6379,
-  host: process.env.REDIS_HOST || '127.0.0.1',
-  password: process.env.REDIS_PASSWORD,
-  db: process.env.REDIS_DB || 0
-});
-
 const getPersonRoutes = (app, authlessRouter) => {
   const authless = new Authless(authlessRouter);
   const router = new ExpressRouter();
+
+  const redis = new Redis({
+    port: process.env.REDIS_PORT || 6379,
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    password: process.env.REDIS_PASSWORD,
+    db: process.env.REDIS_DB || 0
+  });
 
   router.
     get('/health', async (_, res) => {
@@ -176,14 +176,14 @@ const getPersonRoutes = (app, authlessRouter) => {
           // Check if there are more things to expand
           const expandAllLinks = async (expression, timeout = 250) => {
             const handles = await page.$x(`//button[contains(text(), '${expression}')]`);
-              if (handles.length > 0) {
-                await handles.shift().click();
-                await delay(timeout);
-                // check for more
-                return expandAllLinks(expression, timeout);
-              }
-              return true;
+            if (handles.length > 0) {
+              await handles.shift().click();
+              await delay(timeout);
+              // check for more
+              return expandAllLinks(expression, timeout);
             }
+            return true;
+          }
           await expandAllLinks('more experience', 500);
           await expandAllLinks('more education');
           await expandAllLinks('more position');
@@ -205,98 +205,98 @@ const getPersonRoutes = (app, authlessRouter) => {
       });
     })).
 
-        /**
-         * Example request
-         * /speedTest?account=service:username
-         */
-        get('/speedTest', wrapAsync(async (req, res) => {
-          const account = getAccountFromRequest(authless, req);
-          const fastOptions = {
-            token: "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm",
-            timeout: 5000,
-            unit: FastSpeedtest.UNITS.Mbps
-          };
-          if (account.proxy) {
-            fastOptions.proxy = `http://${account.proxy.address}:${account.proxy.port}`;
-            if (account.proxy.credentials) {
-              fastOptions.proxy = `http://${account.proxy.credentials.username}:${account.proxy.credentials.password}@${account.proxy.address}:${account.proxy.port}`;
-            }
-          }
-          const fast = new FastSpeedtest(fastOptions);
-          res.set('Content-Type', 'application/json');
-          return res.status(200).send({result: await fast.getSpeed(), resultFormat: 'Mbps'});
-        })).
+    /**
+     * Example request
+     * /speedTest?account=service:username
+     */
+    get('/speedTest', wrapAsync(async (req, res) => {
+      const account = getAccountFromRequest(authless, req);
+      const fastOptions = {
+        token: "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm",
+        timeout: 5000,
+        unit: FastSpeedtest.UNITS.Mbps
+      };
+      if (account.proxy) {
+        fastOptions.proxy = `http://${account.proxy.address}:${account.proxy.port}`;
+        if (account.proxy.credentials) {
+          fastOptions.proxy = `http://${account.proxy.credentials.username}:${account.proxy.credentials.password}@${account.proxy.address}:${account.proxy.port}`;
+        }
+      }
+      const fast = new FastSpeedtest(fastOptions);
+      res.set('Content-Type', 'application/json');
+      return res.status(200).send({result: await fast.getSpeed(), resultFormat: 'Mbps'});
+    })).
 
-        /**
-         * Example request
-         * /findRoute?u=https://google.com
-         */
-        get('/findRoute', wrapAsync(async (req, res) => {
-          const service = authless.$getServiceFromUrl(req.query.u);
-          const serviceNameParts = service.name.split(':');
-          res.json({
-            service: serviceNameParts[0],
-            accountType: serviceNameParts[1],
-          });
-        })).
+    /**
+     * Example request
+     * /findRoute?u=https://google.com
+     */
+    get('/findRoute', wrapAsync(async (req, res) => {
+      const service = authless.$getServiceFromUrl(req.query.u);
+      const serviceNameParts = service.name.split(':');
+      res.json({
+        service: serviceNameParts[0],
+        accountType: serviceNameParts[1],
+      });
+    })).
 
-        /**
-         * Example request
-         * /doctor?account=service:accType:username&responseFormat=json(default: html)
-         */
-        get('/doctor', wrapAsync(async (req, res) => {
-          const account = getAccountFromRequest(authless, req);
-          if (req.query.responseFormat === 'json') {
-            res.set('Content-Type', 'application/json');
-            return res.status(200).send(account._errorPage || {});
-          }
-          res.set('Content-Type', 'text/html');
-          return res.status(200).send((account._errorPage || {}).content || '');
-        })).
+    /**
+     * Example request
+     * /doctor?account=service:accType:username&responseFormat=json(default: html)
+     */
+    get('/doctor', wrapAsync(async (req, res) => {
+      const account = getAccountFromRequest(authless, req);
+      if (req.query.responseFormat === 'json') {
+        res.set('Content-Type', 'application/json');
+        return res.status(200).send(account._errorPage || {});
+      }
+      res.set('Content-Type', 'text/html');
+      return res.status(200).send((account._errorPage || {}).content || '');
+    })).
 
-        /**
-         * If an account is unhealthy due to verification issues, you can verify it here
-         *
-         * Example request
-         * /verify?account=service:accType:username&pin=123456
-         */
-        get('/verify', async (req, res, next) => {
-          try {
-            const authBrowser = authless._acquireBrowserByAccountName(req.query.account);
-            try {
-              await authBrowser._authenticationPage.click('#input__email_verification_pin', {});
-              await authBrowser._authenticationPage.keyboard.type(req.query.pin, {delay: 20});
-              await authBrowser._authenticationPage.click('#email-pin-submit-button', {waitUntil: 'networkidle2'});
-            } catch (e) {
-              return next(e);
-            }
-            await delay(7500);
-            const successBoolean = authBrowser._authenticationPage.url().includes('feed');
-            await authBrowser._authenticationPage.close();
-            res.set('Content-Type', 'application/json');
-            return res.status(200).send({success: successBoolean});
-          } catch (e) {
-            return next(e);
-          }
-        }).
+    /**
+     * If an account is unhealthy due to verification issues, you can verify it here
+     *
+     * Example request
+     * /verify?account=service:accType:username&pin=123456
+     */
+    get('/verify', async (req, res, next) => {
+      try {
+        const authBrowser = authless._acquireBrowserByAccountName(req.query.account);
+        try {
+          await authBrowser._authenticationPage.click('#input__email_verification_pin', {});
+          await authBrowser._authenticationPage.keyboard.type(req.query.pin, {delay: 20});
+          await authBrowser._authenticationPage.click('#email-pin-submit-button', {waitUntil: 'networkidle2'});
+        } catch (e) {
+          return next(e);
+        }
+        await delay(7500);
+        const successBoolean = authBrowser._authenticationPage.url().includes('feed');
+        await authBrowser._authenticationPage.close();
+        res.set('Content-Type', 'application/json');
+        return res.status(200).send({success: successBoolean});
+      } catch (e) {
+        return next(e);
+      }
+    }).
 
-        /**
-         * Try to re-authenticate an account manually
-         *
-         * Example request
-         * /authenticate?account=service:accType:username
-         */
-        get('/authenticate', wrapAsync(async (req, res, next) => {
-          if (!req.query.account) throw new Error(`Request had no 'account' parameter specified`);
-          const account = getAccountFromRequest(authless, req);
-          await authless.useBrowserWithAccount(account, async browser => {
-            const page = await browser.newPage();
-            await account.authenticate(page)
-          }).catch(next);
-          return res.status(200).send(`Done. Check /health or /doctor for result`);
-        })).
+    /**
+     * Try to re-authenticate an account manually
+     *
+     * Example request
+     * /authenticate?account=service:accType:username
+     */
+    get('/authenticate', wrapAsync(async (req, res, next) => {
+      if (!req.query.account) throw new Error(`Request had no 'account' parameter specified`);
+      const account = getAccountFromRequest(authless, req);
+      await authless.useBrowserWithAccount(account, async browser => {
+        const page = await browser.newPage();
+        await account.authenticate(page)
+      }).catch(next);
+      return res.status(200).send(`Done. Check /health or /doctor for result`);
+    })).
 
-        /**
+    /**
      Example request body
      {
        username: "admin",
@@ -315,23 +315,23 @@ const getPersonRoutes = (app, authlessRouter) => {
        }
      }
      */
-        post('/account', wrapAsync(async (req, res) => {
-          const accountService = req.body.service;
-          const accountType = req.body.accountType;
+    post('/account', wrapAsync(async (req, res) => {
+      const accountService = req.body.service;
+      const accountType = req.body.accountType;
 
-          const account = new Account(req.body);
-          // setup and attach rateLimiter
-          req.body.rateLimiter.id = account.getRateLimitId();
-          req.body.rateLimiter.db = redis;
-          account.rateLimiter = new Limiter(req.body.rateLimiter);
-          // submit account to service
+      const account = new Account(req.body);
+      // setup and attach rateLimiter
+      req.body.rateLimiter.id = account.getRateLimitId();
+      req.body.rateLimiter.db = redis;
+      account.rateLimiter = new Limiter(req.body.rateLimiter);
+      // submit account to service
 
-          const service = authless.$getService(`${accountService}:${accountType}`);
-          service.add(account);
-          res.status(200).json({status: 'success'});
-        }))
+      const service = authless.$getService(`${accountService}:${accountType}`);
+      service.add(account);
+      res.status(200).json({status: 'success'});
+    }))
 
-        app.use('', router);
-      };
+  app.use('', router);
+};
 
 module.exports = getPersonRoutes;
