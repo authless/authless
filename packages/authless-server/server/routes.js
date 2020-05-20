@@ -152,7 +152,9 @@ const getPersonRoutes = (app, authlessRouter) => {
 
         const page = await browser.newPage();
         try {
-          if (!await account.isAuthenticated(page)) await account.authenticate(page)
+          if (!await account.isAuthenticated(page)) {
+            await account.authenticate(page)
+          }
 
           switch (await account.isThrottled()) {
             case true: throw new ServerError('Account is throttled', {account});
@@ -163,7 +165,23 @@ const getPersonRoutes = (app, authlessRouter) => {
             return responses.push(await convertResponseToJson(response));
           }
           page.on('response', writeToResponse);
-          const response = await page.goto(req.query.u, {timeout: 0, waitUntil: 'networkidle2'});
+
+          let gotoOptions = {
+            timeout: 0, 
+            waitUntil: 'networkidle2',
+          }
+          if(req.query.referrer && typeof req.query.referrer === 'string') {
+            gotoOptions['referrer'] = req.query.referrer
+          }
+          const response = await page.goto(
+            req.query.u, 
+            gotoOptions
+          );
+
+          // check for captcha selector and try to bypass if found
+          if (account.service.checkCaptcha && typeof account.service.checkCaptcha === 'function') {
+            await account.service.checkCaptcha(page)
+          }
           await page.evaluate(slowScrollToBottom);
           await delay(500);
           if (page.url().includes('login') || page.url().includes('authenticate')) {
