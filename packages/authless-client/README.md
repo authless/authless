@@ -15,8 +15,8 @@ npm install @authless/client
 ## Usage
 
 ```javascript
-const { Client, ClientLowLevel, Cache } = require('@authless/client');
-const { Router } = require('@authless/core');
+import { Client, ClientLowLevel, Cache } from '@authless/client'
+import { Router } from '@authless/core'
 
 // setup a low-level client with optional cache
 authlessLowLevelClient = new ClientLowLevel({
