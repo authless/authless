@@ -2,8 +2,8 @@
   "name": "@authless/client",
   "version": "1.1.0",
   "description": "Client for the authless-server",
-  "main": "dist/index",
-  "types": "dist/index",
+  "main": "dist/src/index",
+  "types": "dist/src/index",
   "scripts": {
     "test:mocha": "DEBUG=authless* mocha",
     "test:coverage:nyc": "nyc --reporter=lcov npm test",
