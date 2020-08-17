@@ -11,7 +11,8 @@ interface Config {
 }
 
 interface UrlParams {
-  u: string
+  url: string
+  referer?: string
   responseFormat?: string
 }
 interface SearchParams {
@@ -59,17 +60,17 @@ class ClientLowLevel {
   }
 
   async url (params: UrlParams, retryCounter = 0): Promise<any> {
-    debug.extend('url')(params.u)
+    debug.extend('url')(params.url)
     params.responseFormat = params.responseFormat ?? 'json'
 
-    let cacheResult = await this.cache?.check(params.u)
+    let cacheResult = await this.cache?.check(params.url)
     if(cacheResult !== null) {
       return cacheResult
     }
     try {
       const data = await this.axios.get(`${this.uri}/url`, {params})
         .then(response => response.data)
-      await this.cache?.write(params.u, data)
+      await this.cache?.write(params.url, data)
       return data
     } catch (e) {
       if (retryCounter < this.retries) {
