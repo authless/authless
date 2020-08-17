@@ -1,3 +1,10 @@
+## [1.2.0](https://github.com/authless/authless-client/compare/v1.1.1...v1.2.0) (2020-08-17)
+
+
+### Features
+
+* use @authless/core v1.1.0 ([6042b1e](https://github.com/authless/authless-client/commit/6042b1ee17a14156b9c14413993d6127e5b2af99))
+
 ### [1.1.1](https://github.com/authless/authless-client/compare/v1.1.0...v1.1.1) (2020-06-12)
 
 
