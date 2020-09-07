@@ -1,3 +1,14 @@
+## [2.0.0](https://github.com/authless/authless-client/compare/v1.2.0...v2.0.0) (2020-09-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **client:** exports single `Client` (removes LowLevel and HighLevelClient) and removes Cache functionality.
+
+### Features
+
+* **client:** simplify client; removes high-level & cache ([6bc8cc6](https://github.com/authless/authless-client/commit/6bc8cc6cc39c86bda98a6fee90854d3308d9edcf))
+
 ## [1.2.0](https://github.com/authless/authless-client/compare/v1.1.1...v1.2.0) (2020-08-17)
 
 
