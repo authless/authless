@@ -4,3 +4,9 @@
 
 ## API Reference
 
+## Packages
+
+|  Package | Description |
+|  --- | --- |
+|  [@authless/client](./client.md) |  |
+
