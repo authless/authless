@@ -1,3 +1,10 @@
+### [2.0.1](https://github.com/authless/authless-client/compare/v2.0.0...v2.0.1) (2020-09-24)
+
+
+### Bug Fixes
+
+* **client:** improve error reporting ([b992a60](https://github.com/authless/authless-client/commit/b992a602567544405b3c3baed80df9e92016bb39))
+
 ## [2.0.0](https://github.com/authless/authless-client/compare/v1.2.0...v2.0.0) (2020-09-07)
 
 
