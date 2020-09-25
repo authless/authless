@@ -123,32 +123,6 @@
             },
             {
               "kind": "Property",
-              "canonicalReference": "@authless/server!Server#logger:member",
-              "docComment": "",
-              "excerptTokens": [
-                {
-                  "kind": "Content",
-                  "text": "logger: "
-                },
-                {
-                  "kind": "Content",
-                  "text": "any"
-                },
-                {
-                  "kind": "Content",
-                  "text": ";"
-                }
-              ],
-              "releaseTag": "Beta",
-              "name": "logger",
-              "propertyTypeTokenRange": {
-                "startIndex": 1,
-                "endIndex": 2
-              },
-              "isStatic": false
-            },
-            {
-              "kind": "Property",
               "canonicalReference": "@authless/server!Server#proxy:member",
               "docComment": "",
               "excerptTokens": [
@@ -250,8 +224,9 @@
                   "text": "run(): "
                 },
                 {
-                  "kind": "Content",
-                  "text": "void"
+                  "kind": "Reference",
+                  "text": "http.Server",
+                  "canonicalReference": "!\"\\\"http\\\"\".Server:class"
                 },
                 {
                   "kind": "Content",

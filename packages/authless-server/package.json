@@ -24,8 +24,10 @@
   "author": "",
   "dependencies": {
     "@authless/core": "^1.4.0",
+    "@types/express": "^4.17.8",
     "axios": "^0.19.0",
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",

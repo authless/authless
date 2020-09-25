@@ -5,6 +5,7 @@
 ```ts
 
 import * as authless from '@authless/core';
+import * as http from 'http';
 import { PuppeteerExtraPlugin } from 'puppeteer-extra';
 
 // @beta
@@ -16,15 +17,13 @@ export class Server {
     // (undocumented)
     domainPathRouter: authless.DomainPathRouter;
     // (undocumented)
-    logger: any;
-    // (undocumented)
     proxy?: authless.ProxyConfig;
     // (undocumented)
     puppeteerParams?: authless.PuppeteerParams;
     // (undocumented)
     puppeteerPlugins?: PuppeteerExtraPlugin[];
     // (undocumented)
-    run(): void;
+    run(): http.Server;
     }
 
 
