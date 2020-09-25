@@ -1,3 +1,10 @@
+### [1.0.1](https://github.com/authless/authless-server/compare/v1.0.0...v1.0.1) (2020-09-25)
+
+
+### Bug Fixes
+
+* **server:** bump @authless/core to 1.4.0 ([5eb0118](https://github.com/authless/authless-server/commit/5eb0118d619646a7dce7bda55b0431c230ba0a61))
+
 ## [1.0.0](https://github.com/authless/authless-server/compare/v0.1.4...v1.0.0) (2020-09-25)
 
 
