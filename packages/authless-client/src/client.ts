@@ -55,10 +55,10 @@ class Client {
         return this.url(params, retryCounter + 1)
       }
       debug.extend('url').extend('error')(`retried ${this.retries} times; its not working`)
-      const statusCode = e.response.status
-      const statusText = e.response.statusText
+      const statusCode: string = e.response.status
+      const statusText: string = e.response.statusText
       const paramsString = JSON.stringify(e.config.params, null, 2)
-      console.log(`(${statusCode} - ${statusText}) for "${e.config.url}" with "${paramsString}"`)
+      console.log(`(${statusCode} - ${statusText}) for "${e.config.url as string}" with "${paramsString}"`)
       throw e
     }
   }
