@@ -1,3 +1,14 @@
+## [1.0.0](https://github.com/authless/authless-server/compare/v0.1.4...v1.0.0) (2020-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* complete rewrite
+
+### Features
+
+* create Server based on core v1.3 ([37322c1](https://github.com/authless/authless-server/commit/37322c173eb49a08a7671ee45390a87a10c455db))
+
 ### [2.0.1](https://github.com/authless/authless-client/compare/v2.0.0...v2.0.1) (2020-09-24)
 
 
