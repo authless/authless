@@ -1,0 +1,277 @@
+{
+  "metadata": {
+    "toolPackage": "@microsoft/api-extractor",
+    "toolVersion": "7.9.22",
+    "schemaVersion": 1003,
+    "oldestForwardsCompatibleVersion": 1001
+  },
+  "kind": "Package",
+  "canonicalReference": "@authless/server!",
+  "docComment": "",
+  "name": "@authless/server",
+  "members": [
+    {
+      "kind": "EntryPoint",
+      "canonicalReference": "@authless/server!",
+      "name": "",
+      "members": [
+        {
+          "kind": "Class",
+          "canonicalReference": "@authless/server!Server:class",
+          "docComment": "/**\n * Helper class to start your running Authless server\n *\n * @remarks\n *\n * This class can be used to create a configurable puppeteer instance with some built-in functionality and plugins\n *\n * @example\n * ```ts\n * await browser = Server.launchBrowser(myDomainPath, myBot, {puppeteerParams, puppeteerPlugins, ..})\n * await page = browser.newPage()\n *\n * await domainPath.pageHandler(page, ..)\n * ```\n *\n * @beta\n */\n",
+          "excerptTokens": [
+            {
+              "kind": "Content",
+              "text": "export declare class Server "
+            }
+          ],
+          "releaseTag": "Beta",
+          "name": "Server",
+          "members": [
+            {
+              "kind": "Constructor",
+              "canonicalReference": "@authless/server!Server:constructor(1)",
+              "docComment": "/**\n * Create a Authless server instance\n *\n * @beta\n */\n",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "constructor(config: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "IServerConfig",
+                  "canonicalReference": "@authless/server!IServerConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ");"
+                }
+              ],
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [
+                {
+                  "parameterName": "config",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 1,
+                    "endIndex": 2
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#botRouter:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "botRouter: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "authless."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "BotRouter",
+                  "canonicalReference": "@authless/core!BotRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "botRouter",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#domainPathRouter:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "domainPathRouter: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "authless."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "DomainPathRouter",
+                  "canonicalReference": "@authless/core!DomainPathRouter:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "domainPathRouter",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#logger:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "logger: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "any"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "logger",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#proxy:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "proxy?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "authless."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "ProxyConfig",
+                  "canonicalReference": "@authless/core!ProxyConfig:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "proxy",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#puppeteerParams:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerParams?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "authless."
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerParams",
+                  "canonicalReference": "@authless/core!PuppeteerParams:type"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerParams",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Property",
+              "canonicalReference": "@authless/server!Server#puppeteerPlugins:member",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "puppeteerPlugins?: "
+                },
+                {
+                  "kind": "Reference",
+                  "text": "PuppeteerExtraPlugin",
+                  "canonicalReference": "puppeteer-extra!PuppeteerExtraPlugin:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "[]"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "releaseTag": "Beta",
+              "name": "puppeteerPlugins",
+              "propertyTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 3
+              },
+              "isStatic": false
+            },
+            {
+              "kind": "Method",
+              "canonicalReference": "@authless/server!Server#run:member(1)",
+              "docComment": "",
+              "excerptTokens": [
+                {
+                  "kind": "Content",
+                  "text": "run(): "
+                },
+                {
+                  "kind": "Content",
+                  "text": "void"
+                },
+                {
+                  "kind": "Content",
+                  "text": ";"
+                }
+              ],
+              "isStatic": false,
+              "returnTypeTokenRange": {
+                "startIndex": 1,
+                "endIndex": 2
+              },
+              "releaseTag": "Beta",
+              "overloadIndex": 1,
+              "parameters": [],
+              "name": "run"
+            }
+          ],
+          "implementsTokenRanges": []
+        }
+      ]
+    }
+  ]
+}
