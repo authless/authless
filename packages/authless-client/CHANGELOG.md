@@ -1,3 +1,10 @@
+### [2.0.2](https://github.com/authless/authless-client/compare/v2.0.1...v2.0.2) (2020-09-25)
+
+
+### Bug Fixes
+
+* **client:** remove obsolete core dep ([10c8c8e](https://github.com/authless/authless-client/commit/10c8c8ee7b74eb18396bec09e965b15692fae4cf))
+
 ### [2.0.1](https://github.com/authless/authless-client/compare/v2.0.0...v2.0.1) (2020-09-24)
 
 
