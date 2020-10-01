@@ -1,3 +1,14 @@
+## [@authless/client-v3.0.0](https://github.com/authless/authless/compare/@authless/client-v2.0.0...@authless/client-v3.0.0) (2020-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **server:** to fix lerna + semantic-release issues
+
+### Bug Fixes
+
+* **server:** always close browser ([5770303](https://github.com/authless/authless/commit/5770303c60fae4c50292bcadf7c04a45044f8a8e))
+
 ## [@authless/client-v2.0.0](https://github.com/authless/authless/compare/@authless/client-v1.0.0...@authless/client-v2.0.0) (2020-10-01)
 
 
