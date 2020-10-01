@@ -2,6 +2,7 @@
   "name": "@authless/core",
   "version": "2.9.0",
   "description": "A browserless authentication and service management framework",
+  "public": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "dependencies": {
@@ -28,13 +29,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/authless/authless-core.git"
+    "url": "git+https://github.com/authless/authless.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/authless/authless-core/issues"
+    "url": "https://github.com/authless/authless/issues"
   },
-  "homepage": "https://github.com/authless/authless-core#readme"
+  "homepage": "https://github.com/authless/authless#readme"
 }

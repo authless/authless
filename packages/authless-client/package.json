@@ -2,8 +2,9 @@
   "name": "@authless/client",
   "version": "2.0.0",
   "description": "Client for @authless/server",
-  "main": "dist/src/index",
-  "types": "dist/src/index",
+  "public": true,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "test:mocha": "DEBUG=authless* mocha",
     "test:coverage:nyc": "nyc --reporter=lcov npm test",
@@ -25,8 +26,5 @@
     "@types/check-types": "^7.3.1",
     "axios": "^0.19.0",
     "debug": "^4.1.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

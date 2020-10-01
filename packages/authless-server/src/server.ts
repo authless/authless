@@ -75,79 +75,81 @@ export class Server {
   }
 
   private async scrape (expressRequest: ExpressRequest, expressResponse: ExpressResponse): Promise<any> {
-    const urlParams = expressRequest.query
-    const { url, username } = urlParams
+    try {
+      const urlParams = expressRequest.query
+      const { url, username } = urlParams
 
-    if (typeof url !== 'string') {
-      const error = `error: url must be provided as a query parameter string. invalid value: ${url?.toLocaleString() ?? 'undefined'}`
-      console.log(error)
-      expressResponse
+      if (typeof url !== 'string') {
+        const error = `error: url must be provided as a query parameter string. invalid value: ${url?.toLocaleString() ?? 'undefined'}`
+        console.log(error)
+        expressResponse
         .status(422)
         .send(error)
         .end()
-      return
-    }
+        return
+      }
 
-    // try to fetch the sevice for this url
-    const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
-    if (typeof selectedDomainPath === 'undefined') {
-      expressResponse
+      // try to fetch the sevice for this url
+      const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
+      if (typeof selectedDomainPath === 'undefined') {
+        expressResponse
         .status(501)
         .send('Service not found')
         .end()
-      return
-    }
+        return
+      }
 
-    // get bot when username not provided explicitly
-    let selectedBot = this.botRouter.getBotForUrl(url)
-    // get bot when username is provided
-    if (typeof username === 'string') {
-      selectedBot = this.botRouter.getBotByUsername(username)
-      if (selectedBot instanceof authless.AnonBot) {
-        expressResponse
+      // get bot when username not provided explicitly
+      let selectedBot = this.botRouter.getBotForUrl(url)
+      // get bot when username is provided
+      if (typeof username === 'string') {
+        selectedBot = this.botRouter.getBotByUsername(username)
+        if (selectedBot instanceof authless.AnonBot) {
+          expressResponse
           .status(501)
           .send(`No Bot found for username: ${username}`)
           .end()
-        return
-      }
-    }
-
-    // initialise the browser
-    const browser = await selectedBot.launchBrowser({
-      puppeteerParams: this.puppeteerParams,
-      proxy: this.proxy
-    })
-    const page = await browser.newPage()
-    await page.evaluateOnNewDocument(() => {
-      /* eslint-disable-next-line no-proto */
-      const newProto = (navigator as any).__proto__
-      /* eslint-disable-next-line prefer-reflect */
-      delete newProto.webdriver;
-      /* eslint-disable-next-line no-proto */
-      (navigator as any).__proto__ = newProto
-    })
-
-    try {
-      if (typeof this.puppeteerParams?.viewPort !== 'undefined') {
-        await page.setViewport(this.puppeteerParams?.viewPort)
-      }
-
-      let responseFormat: authless.URLParams['responseFormat'] = 'json'
-      if (urlParams?.responseFormat === 'png') {
-        responseFormat = urlParams?.responseFormat
-      }
-      // let service handle the page
-      const authlessResponse = await selectedDomainPath.pageHandler(
-        page,
-        selectedBot,
-        {
-          urlParams: { url, responseFormat },
-          puppeteerParams: this.puppeteerParams
+          return
         }
-      )
+      }
 
-      if (responseFormat === 'json') {
-        expressResponse
+      // initialise the browser
+      const browser = await selectedBot.launchBrowser({
+        puppeteerParams: this.puppeteerParams,
+        proxy: this.proxy
+      })
+      const page = await browser.newPage()
+
+      try {
+        await page.evaluateOnNewDocument(() => {
+          /* eslint-disable-next-line no-proto */
+          const newProto = (navigator as any).__proto__
+          /* eslint-disable-next-line prefer-reflect */
+          delete newProto.webdriver;
+          /* eslint-disable-next-line no-proto */
+          (navigator as any).__proto__ = newProto
+        })
+
+        if (typeof this.puppeteerParams?.viewPort !== 'undefined') {
+          await page.setViewport(this.puppeteerParams?.viewPort)
+        }
+
+        let responseFormat: authless.URLParams['responseFormat'] = 'json'
+        if (urlParams?.responseFormat === 'png') {
+          responseFormat = urlParams?.responseFormat
+        }
+        // let service handle the page
+        const authlessResponse = await selectedDomainPath.pageHandler(
+          page,
+          selectedBot,
+          {
+            urlParams: { url, responseFormat },
+            puppeteerParams: this.puppeteerParams
+          }
+        )
+
+        if (responseFormat === 'json') {
+          expressResponse
           .status(200)
           .set('Content-Type', 'application/json; charset=utf-8')
           .send({
@@ -157,29 +159,37 @@ export class Server {
             xhrs: authlessResponse.xhrs,
           })
           .end()
-      } else if (responseFormat === 'png') {
-        expressResponse
+        } else if (responseFormat === 'png') {
+          expressResponse
           .status(200)
           .set('Content-Type', 'image/png')
           .end(await page.screenshot({fullPage: true}), 'binary')
-      } else {
-        expressResponse
+        } else {
+          expressResponse
           .status(501)
           .end('Can only handle responseFormat of type json or png')
-      }
-    } catch (err) {
-      console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
-      const screenshotPath = `/tmp/${uuidv4() as string}.png`
-      console.log('saving error screenshot ...')
-      await page.screenshot({path: screenshotPath})
-      console.log(`saved error screenshot to: ${screenshotPath}`)
-      expressResponse
+        }
+      } catch (err) {
+        console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
+        const screenshotPath = `/tmp/${uuidv4() as string}.png`
+        console.log('saving error screenshot ...')
+        await page.screenshot({path: screenshotPath})
+        console.log(`saved error screenshot to: ${screenshotPath}`)
+        expressResponse
         .status(501)
         .send('Server Error')
         .end()
+      } finally {
+        await page.close()
+        await browser.close()
+        return
+      }
+      await page.close()
+      await browser.close()
+    } catch (error) {
+      console.log(`UNEXPECTED ERROR: ${error.stack}`)
+      expressResponse.status(500).send(error.stack).end()
     }
-    await page.close()
-    await browser.close()
   }
 
   public run (): http.Server {
