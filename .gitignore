@@ -19,3 +19,4 @@ config/dev.toml
 coverage
 docs/markdown/*
 chrome-default-user-data-dir
+packages/**/docs
