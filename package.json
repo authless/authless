@@ -1,6 +1,14 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap --hoist",
+    "build": "lerna run build",
+    "prepare": "lerna run --stream --sort prepare",
+    "test": "lerna run test",
+    "test:coverage": "lerna run test:coverage",
+    "lint": "lerna run lint"
+  },
   "devDependencies": {
     "lerna": "^3.22.1"
   }

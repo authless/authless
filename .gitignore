@@ -18,3 +18,4 @@ token.json
 config/dev.toml
 coverage
 docs/markdown/*
+chrome-default-user-data-dir
