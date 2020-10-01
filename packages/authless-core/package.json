@@ -1,6 +1,6 @@
 {
   "name": "@authless/core",
-  "version": "2.9.0",
+  "version": "1.0.0",
   "description": "A browserless authentication and service management framework",
   "public": true,
   "main": "dist/src/index.js",

@@ -1,3 +1,22 @@
+## @authless/core-v1.0.0 (2020-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **server:** to fix lerna + semantic-release issues
+* uses lerna monorepo now
+
+### Features
+
+* add @authless/common ([25715e5](https://github.com/authless/authless/commit/25715e542e10f94721ff548bbde578bb5aef82da))
+* **server:** remove server in favor of own repo ([3bd084b](https://github.com/authless/authless/commit/3bd084bcd618e8592d555b2f49ef8174789d6bed))
+
+
+### Bug Fixes
+
+* **server:** always close browser ([5770303](https://github.com/authless/authless/commit/5770303c60fae4c50292bcadf7c04a45044f8a8e))
+* register plugins new for each launch ([138241e](https://github.com/authless/authless/commit/138241e1a56fdd703e3e64229e776ed0bcc786c4))
+
 ### [1.4.1](https://github.com/authless/authless-core/compare/v1.4.0...v1.4.1) (2020-09-25)
 
 
