@@ -1,5 +1,5 @@
-import { Test } from '../src'
+import * as Lib from '../src'
 
 test('valid Test', () => {
-  const a: Test = { name: 'test' }
+  expect(Object.keys(Lib).length).toBeGreaterThanOrEqual(0)
 })

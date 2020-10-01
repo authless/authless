@@ -4,12 +4,49 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "build": "lerna run build",
-    "prepare": "lerna run --stream --sort prepare",
     "test": "lerna run test",
     "test:coverage": "lerna run test:coverage",
-    "lint": "lerna run lint"
+    "lint": "lerna run lint",
+    "semantic-release": "lerna run semantic-release",
+    "semantic-release:ci": "lerna run semantic-release:ci"
   },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@microsoft/api-documenter": "^7.8.4",
+    "@microsoft/api-extractor": "^7.8.4",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@types/debug": "^4.1.5",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.4",
+    "@types/node-fetch": "^2.5.7",
+    "@types/puppeteer": "^3.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard-with-typescript": "^16.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-tsdoc": "^0.2.5",
+    "jest": "^25.5.3",
+    "lerna": "^3.22.1",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.1",
+    "semantic-release": "^17.0.7",
+    "semantic-release-monorepo": "^7.0.3",
+    "sinon": "^8.1.1",
+    "ts-jest": "^25.4.0",
+    "typedoc": "^0.17.6",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@authless/client": "file:packages/authless-client",
+    "@authless/core": "file:packages/authless-core",
+    "@authless/server": "file:packages/authless-server",
+    "ts-template": "file:packages/authless-extract"
   }
 }
