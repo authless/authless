@@ -1,3 +1,19 @@
+## @authless/client-v1.0.0 (2020-10-01)
+
+
+### Features
+
+* use @authless/core v1.1.0 ([e1cdc8d](https://github.com/authless/authless/commit/e1cdc8d68b8ffd2e0a287e443d964164c2fb0146))
+
+
+### Bug Fixes
+
+* remove obsolete check-types dep ([bcfff67](https://github.com/authless/authless/commit/bcfff67a3e27a077e6f195a909b76ba57e90fc48))
+* **client:** improve error reporting ([fe0562c](https://github.com/authless/authless/commit/fe0562c57ac3631cf105e0ef1a3e451b4d6302a6))
+* **client:** remove obsolete core dep ([19278a3](https://github.com/authless/authless/commit/19278a39f15da9f1c4492758ef4641497c35bd5c))
+* **package:** add prepublish build hook ([1212756](https://github.com/authless/authless/commit/1212756125c23d4bc122a1798de5d27ef5ed49d7))
+* **package:** fix types path ([d3080e6](https://github.com/authless/authless/commit/d3080e61d3b3b71f8d2bafad324a4c7a7911f2d7))
+
 ### [2.0.2](https://github.com/authless/authless-client/compare/v2.0.1...v2.0.2) (2020-09-25)
 
 
