@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: '12.x'
 
+      - run: npm ci
       - name: Semantic Release
         run: npm run semantic-release:ci
         env:
