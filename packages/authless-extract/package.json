@@ -1,6 +1,6 @@
 {
-  "name": "ts-template",
-  "version": "1.0.0",
+  "name": "@authless/extract",
+  "version": "2.9.0",
   "description": "",
   "main": "dist/index",
   "types": "dist/index",
@@ -13,13 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MichaelHirn/ts-template.git"
+    "url": "git+https://github.com/authless/authless.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/MichaelHirn/ts-template/issues"
+    "url": "https://github.com/authless/authless/issues"
   },
-  "homepage": "https://github.com/MichaelHirn/ts-template#readme"
+  "homepage": "https://github.com/authless/authless/packages/authless-extract#readme"
 }

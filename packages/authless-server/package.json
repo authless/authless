@@ -1,7 +1,7 @@
 {
   "name": "@authless/server",
-  "version": "1.0.0",
-  "description": "Server for the authless-core",
+  "version": "2.9.0",
+  "description": "REST server for @authless",
   "public": true,
   "main": "dist/src/index",
   "types": "dist/src/index",

@@ -1,7 +1,7 @@
 {
   "name": "@authless/client",
-  "version": "1.0.0",
-  "description": "Client for the authless-server",
+  "version": "2.9.0",
+  "description": "Client for @authless/server",
   "main": "dist/src/index",
   "types": "dist/src/index",
   "scripts": {
