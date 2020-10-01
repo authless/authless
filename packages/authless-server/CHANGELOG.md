@@ -1,3 +1,12 @@
+## @authless/server-v1.0.0 (2020-10-01)
+
+
+### Bug Fixes
+
+* **core:** bump @authless/core to 1.4.1 ([2964617](https://github.com/authless/authless/commit/296461772f0772c0f52b6617ae378148d979c819))
+* **server:** bump @authless/core to 1.4.0 ([8a8340a](https://github.com/authless/authless/commit/8a8340ad7bb0aa8d85e902771968f0f50260ab49))
+* add lazy redis connect ([eb15cd4](https://github.com/authless/authless/commit/eb15cd47d83006a8d3801f1a33405e3eef4d00a7))
+
 ### [1.0.2](https://github.com/authless/authless-server/compare/v1.0.1...v1.0.2) (2020-09-25)
 
 
