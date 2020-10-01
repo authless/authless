@@ -1,6 +1,6 @@
 {
   "name": "@authless/common",
-  "version": "2.9.0",
+  "version": "1.0.0",
   "description": "Shared interaces, types, classes across authless components",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
