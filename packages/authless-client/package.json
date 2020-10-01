@@ -26,34 +26,6 @@
     "axios": "^0.19.0",
     "debug": "^4.1.1"
   },
-  "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "@microsoft/api-documenter": "^7.8.4",
-    "@microsoft/api-extractor": "^7.8.4",
-    "@semantic-release/changelog": "^5.0.1",
-    "@semantic-release/git": "^9.0.0",
-    "@types/debug": "^4.1.5",
-    "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.4",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "chai": "^4.2.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard-with-typescript": "^16.0.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-tsdoc": "^0.2.5",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "jest": "^25.5.3",
-    "mocha": "^7.0.0",
-    "nyc": "^15.0.1",
-    "semantic-release": "^17.0.7",
-    "sinon": "^8.1.1",
-    "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3"
-  },
   "publishConfig": {
     "access": "public"
   }
