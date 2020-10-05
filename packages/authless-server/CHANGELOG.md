@@ -1,3 +1,10 @@
+## [@authless/server-v3.0.1](https://github.com/authless/authless/compare/@authless/server-v3.0.0...@authless/server-v3.0.1) (2020-10-05)
+
+
+### Bug Fixes
+
+* **server:** improve error handling ([fa86cf4](https://github.com/authless/authless/commit/fa86cf48cdd3ec3cd64d12fa78a699401261ae92))
+
 ## [@authless/server-v3.0.0](https://github.com/authless/authless/compare/@authless/server-v2.0.0...@authless/server-v3.0.0) (2020-10-01)
 
 
