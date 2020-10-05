@@ -25,7 +25,6 @@
   "dependencies": {
     "@authless/core": "file:../authless-core",
     "@types/express": "^4.17.8",
-    "axios": "^0.19.0",
     "debug": "^4.1.1",
     "express": "^4.17.1"
   },

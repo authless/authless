@@ -80,23 +80,13 @@ export class Server {
       const { url, username } = urlParams
 
       if (typeof url !== 'string') {
-        const error = `error: url must be provided as a query parameter string. invalid value: ${url?.toLocaleString() ?? 'undefined'}`
-        console.log(error)
-        expressResponse
-        .status(422)
-        .send(error)
-        .end()
-        return
+        throw new Error(`url must be provided as a query parameter string. invalid value: ${url?.toLocaleString() ?? 'undefined'}`)
       }
 
       // try to fetch the sevice for this url
       const selectedDomainPath = this.domainPathRouter.getDomainPath(url)
       if (typeof selectedDomainPath === 'undefined') {
-        expressResponse
-        .status(501)
-        .send('Service not found')
-        .end()
-        return
+        throw new Error(`no DomainPath handler found for ${url}`)
       }
 
       // get bot when username not provided explicitly
@@ -105,11 +95,7 @@ export class Server {
       if (typeof username === 'string') {
         selectedBot = this.botRouter.getBotByUsername(username)
         if (selectedBot instanceof authless.AnonBot) {
-          expressResponse
-          .status(501)
-          .send(`No Bot found for username: ${username}`)
-          .end()
-          return
+          throw new Error(`unable to find bot with username ${username}`)
         }
       }
 
@@ -150,24 +136,24 @@ export class Server {
 
         if (responseFormat === 'json') {
           expressResponse
-          .status(200)
-          .set('Content-Type', 'application/json; charset=utf-8')
-          .send({
-            meta: authlessResponse.meta,
-            page: authlessResponse.page,
-            main: authlessResponse.main,
-            xhrs: authlessResponse.xhrs,
-          })
-          .end()
+            .status(200)
+            .set('Content-Type', 'application/json; charset=utf-8')
+            .send({
+              meta: authlessResponse.meta,
+              page: authlessResponse.page,
+              main: authlessResponse.main,
+              xhrs: authlessResponse.xhrs,
+            })
+            .end()
         } else if (responseFormat === 'png') {
           expressResponse
-          .status(200)
-          .set('Content-Type', 'image/png')
-          .end(await page.screenshot({fullPage: true}), 'binary')
+            .status(200)
+            .set('Content-Type', 'image/png')
+            .end(await page.screenshot({fullPage: true}), 'binary')
         } else {
           expressResponse
-          .status(501)
-          .end('Can only handle responseFormat of type json or png')
+            .status(501)
+            .end('Can only handle responseFormat of type json or png')
         }
       } catch (err) {
         console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
@@ -175,24 +161,22 @@ export class Server {
         console.log('saving error screenshot ...')
         await page.screenshot({path: screenshotPath})
         console.log(`saved error screenshot to: ${screenshotPath}`)
-        expressResponse
-        .status(501)
-        .send('Server Error')
-        .end()
+        expressResponse.status(501).send('Server Error').end()
       } finally {
         await page.close()
         await browser.close()
-        return
       }
-      await page.close()
-      await browser.close()
+      try {
+        await page.close()
+        await browser.close()
+      } catch (_) {}
     } catch (error) {
-      console.log(`UNEXPECTED ERROR: ${error.stack}`)
+      console.log(`UNEXPECTED ERROR: ${error.stack as string}`)
       expressResponse.status(500).send(error.stack).end()
     }
   }
 
-  public run (): http.Server {
+  public async run (): Promise<http.Server> {
     const app = express()
     app.use(express.json())
     app.use(express.urlencoded())
@@ -203,8 +187,15 @@ export class Server {
     app.get('/url', async (req, res) => await this.scrape(req, res))
 
     // start express
-    return app.listen(PORT, () => {
-      console.log(`Listening on port ${PORT}`)
+    return await new Promise((resolve, reject) => {
+      try {
+        const server = app.listen(PORT, () => {
+          console.log(`Listening on port ${PORT}`)
+          resolve(server)
+        })
+      } catch (error) {
+        reject(error)
+      }
     })
   }
 }
