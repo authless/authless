@@ -1,3 +1,10 @@
+## [@authless/server-v3.1.0](https://github.com/authless/authless/compare/@authless/server-v3.0.1...@authless/server-v3.1.0) (2020-10-07)
+
+
+### Features
+
+* **common:** refactor core => common ([50a3219](https://github.com/authless/authless/commit/50a3219100b668ec748b6a58255b042d97603a5f))
+
 ## [@authless/server-v3.0.1](https://github.com/authless/authless/compare/@authless/server-v3.0.0...@authless/server-v3.0.1) (2020-10-05)
 
 
