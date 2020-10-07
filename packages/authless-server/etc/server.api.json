@@ -70,7 +70,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "authless."
+                  "text": "core."
                 },
                 {
                   "kind": "Reference",
@@ -101,7 +101,7 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "authless."
+                  "text": "core."
                 },
                 {
                   "kind": "Reference",
@@ -132,12 +132,12 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "authless."
+                  "text": "common."
                 },
                 {
                   "kind": "Reference",
                   "text": "ProxyConfig",
-                  "canonicalReference": "@authless/core!ProxyConfig:interface"
+                  "canonicalReference": "@authless/common!ProxyConfig:interface"
                 },
                 {
                   "kind": "Content",
@@ -163,12 +163,12 @@
                 },
                 {
                   "kind": "Content",
-                  "text": "authless."
+                  "text": "common."
                 },
                 {
                   "kind": "Reference",
                   "text": "PuppeteerParams",
-                  "canonicalReference": "@authless/core!PuppeteerParams:type"
+                  "canonicalReference": "@authless/common!PuppeteerParams:type"
                 },
                 {
                   "kind": "Content",
@@ -225,8 +225,21 @@
                 },
                 {
                   "kind": "Reference",
+                  "text": "Promise",
+                  "canonicalReference": "!Promise:interface"
+                },
+                {
+                  "kind": "Content",
+                  "text": "<"
+                },
+                {
+                  "kind": "Reference",
                   "text": "http.Server",
                   "canonicalReference": "!\"\\\"http\\\"\".Server:class"
+                },
+                {
+                  "kind": "Content",
+                  "text": ">"
                 },
                 {
                   "kind": "Content",
@@ -236,7 +249,7 @@
               "isStatic": false,
               "returnTypeTokenRange": {
                 "startIndex": 1,
-                "endIndex": 2
+                "endIndex": 5
               },
               "releaseTag": "Beta",
               "overloadIndex": 1,

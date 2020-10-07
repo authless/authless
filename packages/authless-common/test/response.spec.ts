@@ -1,6 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import * as fs from 'fs-extra'
-import * as path from 'path'
 import {
   Resource,
   ResourceCollection,
@@ -29,18 +27,22 @@ class TestResourceCollection extends ResourceCollection<TestResource> {
 
 }
 
-const responseSerialized = fs.readJsonSync(
-  path.join(__dirname, './fixtures/fullResponsePayload.json')
-)
-
 describe('Response', () => {
   test('it can be initialized', () => {
-    const response = new TestResponse(responseSerialized)
+    const response = new TestResponse({
+      meta: {
+        timestamp: 1583140599365
+      }
+    })
     expect(response.meta.timestamp).toBe(1583140599365)
   })
 
   test('it transforms to ResourceCollection', () => {
-    const response = new TestResponse(responseSerialized)
+    const response = new TestResponse({
+      meta: {
+        timestamp: 1583140599365
+      }
+    })
     const resources = response.toResources()
     expect(resources).toBeInstanceOf(TestResourceCollection)
   })

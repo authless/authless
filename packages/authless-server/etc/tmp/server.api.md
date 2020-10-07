@@ -4,7 +4,8 @@
 
 ```ts
 
-import * as authless from '@authless/core';
+import * as common from '@authless/common';
+import * as core from '@authless/core';
 import * as http from 'http';
 import { PuppeteerExtraPlugin } from 'puppeteer-extra';
 
@@ -13,17 +14,17 @@ export class Server {
     // Warning: (ae-forgotten-export) The symbol "IServerConfig" needs to be exported by the entry point index.d.ts
     constructor(config: IServerConfig);
     // (undocumented)
-    botRouter: authless.BotRouter;
+    botRouter: core.BotRouter;
     // (undocumented)
-    domainPathRouter: authless.DomainPathRouter;
+    domainPathRouter: core.DomainPathRouter;
     // (undocumented)
-    proxy?: authless.ProxyConfig;
+    proxy?: common.ProxyConfig;
     // (undocumented)
-    puppeteerParams?: authless.PuppeteerParams;
+    puppeteerParams?: common.PuppeteerParams;
     // (undocumented)
     puppeteerPlugins?: PuppeteerExtraPlugin[];
     // (undocumented)
-    run(): http.Server;
+    run(): Promise<http.Server>;
     }
 
 

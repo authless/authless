@@ -1,18 +1,12 @@
-import {
-  Page as PuppeteerPage,
-  Response as PuppeteerResponse,
-} from 'puppeteer'
-import {
-  PuppeteerParams,
-  Xhr,
-} from '../types'
-import { Response as AuthlessResponse } from '../response'
+import { Page, Response } from 'puppeteer'
+import { PuppeteerParams, Response as ResponseAuthless } from '@authless/common'
 import { Bot } from '../bots/bot'
 
 /**
  * The interface that controls the behaviour and page-handling for a particular domain/subdomain/url
  *
  * @remarks
+ *
  * This is responsible for handling the page that is fetched.
  * If different behaviours are required for different URLs
  * (say some pages have pagination, while others require you to expand links)
@@ -22,6 +16,7 @@ import { Bot } from '../bots/bot'
  * You can add custom behaviour in the getJsonResponse(), setupPage() and pageHandler() functions
  *
  * @example
+ *
  * ```ts
  * // create 2 DomainPaths
  * class PaginationDomainPath extends DomainPath {
@@ -60,8 +55,7 @@ export class DomainPath {
    * Certain resourceTypes can be blocked
    * by passing blockResourceTypes in {@link PuppeteerParams}
    */
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly
-  responses: Xhr[]
+  xhrResponses: Response[]
 
   /**
    * Create a DomainPath instance.
@@ -78,22 +72,15 @@ export class DomainPath {
    */
   constructor (domain: string) {
     this.domain = domain
-    this.responses = []
+    this.xhrResponses = []
   }
 
-  private addResponseHook (page: PuppeteerPage, blockResourceTypes: string[]): void {
+  private addResponseHook (page: Page, blockResourceTypes: string[]): void {
     console.log(`-- setting up to block resourceTypes: ${JSON.stringify(blockResourceTypes)}`)
-    const saveResponse = async (response: PuppeteerResponse): Promise<void> => {
-      const returnObj = await AuthlessResponse.convertResponseToJson(response)
-      if(typeof returnObj.request !== 'undefined') {
-        if(!blockResourceTypes.includes(returnObj.request.resourceType)) {
-          try {
-            returnObj.text = await response.text()
-          } catch (e) {
-            console.log(`error: response.text() failed for ${returnObj.request.url}`)
-          }
-          this.responses.push(returnObj)
-        }
+    const saveResponse = async (response): Promise<void> => {
+      const request = response.request()
+      if (!blockResourceTypes.includes(request.resourceType())) {
+        this.xhrResponses.push(response)
       }
     }
     // attach handler to save responses
@@ -102,7 +89,7 @@ export class DomainPath {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private async addRequestBlockers (page: PuppeteerPage, blockedDomains: string[]): Promise<void> {
+  private async addRequestBlockers (page: Page, blockedDomains: string[]): Promise<void> {
     console.log(`-- setting up to block requests from domains: ${JSON.stringify(blockedDomains)}`)
     // block any domains we dont want to load from
     await page.setRequestInterception(true)
@@ -135,7 +122,7 @@ export class DomainPath {
    * @param page - The puppeteer page to which we can attach listeners or change behaviour of
    * @param puppeteerParams - The {@link PuppeteerParams} object passed by the user
    */
-  public async setupPage (page: PuppeteerPage, puppeteerParams: PuppeteerParams): Promise<void> {
+  public async setupPage (page: Page, puppeteerParams: PuppeteerParams): Promise<void> {
 
     if(typeof puppeteerParams?.viewPort !== 'undefined') {
       await page.setViewport(puppeteerParams.viewPort)
@@ -168,7 +155,7 @@ export class DomainPath {
    * @param config - Optional. The {@link BrowserConfig} passed by the user
    */
   // eslint-disable-next-line class-methods-use-this
-  public async pageHandler (page: PuppeteerPage, selectedBot?: Bot, config?: any): Promise<AuthlessResponse> {
+  public async pageHandler (page: Page, selectedBot?: Bot, config?: any): Promise<ResponseAuthless> {
     throw new Error('not implemented')
   }
 
