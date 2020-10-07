@@ -1,5 +1,5 @@
 import { Bot } from './bot'
-import { BotConfig } from '../types'
+import { BotConfig } from '@authless/common'
 
 /**
  * The "Anonymous Bot", i.e. a bot that has no credentials.

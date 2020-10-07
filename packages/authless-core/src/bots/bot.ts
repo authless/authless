@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { BotConfig, BrowserConfig } from '../types'
+import { BotConfig, BrowserConfig } from '@authless/common'
 import { PuppeteerExtraPlugin, addExtra } from 'puppeteer-extra'
 import puppeteer, { Browser } from 'puppeteer'
 import ProxyPlugin from 'puppeteer-extra-plugin-proxy'

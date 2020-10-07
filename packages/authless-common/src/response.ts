@@ -1,19 +1,7 @@
-/* eslint-disable max-lines */
-import {
-  IResource,
-  IResourceCollection,
-} from './resource'
-import {
-  IResponseMeta,
-  RequestContainer,
-  Xhr
-} from './types'
-import {
-  Page as PuppeteerPage,
-  Request as PuppeteerRequest,
-  Response as PuppeteerResponse
-} from 'puppeteer'
-import { Bot } from './bots/bot'
+import { ISerializedPage, ISerializedResponse, Mapper } from './mapper'
+import { Page, Response as ResponsePuppeteer } from 'puppeteer'
+import { IResource } from './resource'
+import { IResourceCollection } from './resourceCollection'
 
 /**
  * The raw response from a service including any (xhrs) requests and responses and meta information.
@@ -42,24 +30,17 @@ export interface IResponse {
   /**
    * The main page response. See {@link IResponsePage}.
    */
-  page: IResponsePage
-
-  /**
-   * The page body (usually html) of the response.
-   *
-   * @deprecated Can be omitted as its available via {@link IResponsePage.content}
-   */
-  content?: string
+  page: ISerializedPage
 
   /**
    * The main request & response chain. See {@link IResponseResponse}.
    */
-  main: IResponseResponse
+  main: ISerializedResponse
 
   /**
    * Any XHR request & responses. See {@link IResponseResponse}.
    */
-  xhrs: IResponseResponse[]
+  xhrs: ISerializedResponse[]
 
   /**
    * Creates a {@link IResponseResponse} from an {@link IResponse} instance.
@@ -74,9 +55,9 @@ export interface IResponse {
  */
 export class Response implements IResponse {
   meta: IResponseMeta
-  page: IResponsePage
-  main: IResponseResponse
-  xhrs: IResponseResponse[]
+  page: ISerializedPage
+  main: ISerializedResponse
+  xhrs: ISerializedResponse[]
 
   constructor (serializedResponse: any) {
     this.meta = serializedResponse.meta
@@ -94,64 +75,7 @@ export class Response implements IResponse {
   }
 
   /**
-   * Create a {@link RequestContainer} JSON structure from the puppeteer request
-   *
-   * @param request - The puppeteer request from which to form the {@link RequestContainer}
-   * @returns
-   * A {@link RequestContainer} if possible, throws on error
-   */
-  static async convertRequestToJson (request: PuppeteerRequest): Promise<RequestContainer> {
-    try{
-      const requestData = {
-        headers: request.headers(),
-        isNavigationRequest: request.isNavigationRequest(),
-        method: request.method(),
-        postData: request.postData(),
-        resourceType: request.resourceType(),
-        url: request.url()
-      }
-      return requestData
-    } catch (e) {
-      console.log('error: unable to extract request data from Xhr response')
-      throw e
-    }
-  }
-
-  /**
-   * Convert a puppeteer page response into a JSON object of type {@link Xhr}
-   *
-   * @param response - The puppeteer response from which to generate the {@link Xhr} JSON object
-   * @returns
-   * A JSON object with the response metadata and content {@link Xhr}
-   */
-  static async convertResponseToJson (response: PuppeteerResponse): Promise<Xhr> {
-
-    const securityDetails = {
-      issuer: response.securityDetails()?.issuer(),
-      protocol: response.securityDetails()?.protocol(),
-      subjectName: response.securityDetails()?.subjectName(),
-      validFrom: response.securityDetails()?.validFrom(),
-      validTo: response.securityDetails()?.validTo(),
-    }
-    const returnObj: Xhr = {
-      url: response.url(),
-      status: response.status(),
-      statusText: response.statusText(),
-      headers: response.headers(),
-      securityDetails: securityDetails,
-      fromCache: response.fromCache(),
-      fromServiceWorker: response.fromServiceWorker(),
-      // eslint-disable-next-line no-undefined
-      text: undefined,
-      // eslint-disable-next-line no-undefined
-      request: undefined,
-    }
-    returnObj.request = await Response.convertRequestToJson(response.request())
-    return returnObj
-  }
-
-  /**
-   * Form a {@link IResponse} object from the puppeteer page
+   * Construct a {@link Response} instance from the puppeteer page
    *
    * @remarks
    *
@@ -162,189 +86,34 @@ export class Response implements IResponse {
    *
    * @returns the generated {@link Response}
    */
-  public static async fromPage (page: PuppeteerPage, data: {mainResponse: PuppeteerResponse, bot: Bot, responses: Xhr[]}): Promise<Response> {
-    const { mainResponse, bot, responses } = data
+  /* eslint-disable-next-line max-params */
+  public static async fromPage (
+    bot: any,
+    page: Page,
+    mainResponse: ResponsePuppeteer,
+    xhrResponses: ResponsePuppeteer[]
+  ): Promise<Response> {
     return new Response({
       meta: {
         timestamp: Date.now(),
         username: bot.username ?? 'anonymous',
       },
-      page: {
-        url: page.url(),
-        viewport: page.viewport(),
-        content: await page.content(),
-        cookies: await page.cookies(),
-        title: await page.title(),
-      },
-      main: await Response.convertResponseToJson(mainResponse),
-      xhrs: responses
+      page: await Mapper.page.toObject(page),
+      main: await Mapper.response.toObject(mainResponse),
+      xhrs: await Promise.all(
+        xhrResponses.map(async response => await Mapper.response.toObject(response))
+      )
     })
   }
-
 }
 
 /**
- * Sub-type of {@link IResponsePage}.
- *
- * @privateRemarks
- *
- * @beta
- */
-interface IViewport {
-  width: number
-  height: number
-  deviceScaleFactor: number
-  isMobile: boolean
-  hasTouch: boolean
-  isLandscape: boolean
-}
-
-/**
- * Sub-type of {@link ICookie}.
- *
- * @privateRemarks
+ * Authless meta information about the response of a page {@link IResponse}
+ * Can include the timestamp when the page was fetched
  *
  * @beta
  */
-type ISameSiteSetting = 'Strict' | 'Lax'
-
-/**
- * Sub-type of {@link IResponsePage}.
- *
- * @privateRemarks
- *
- * @beta
- */
-interface ICookie {
-  name: string
-  value: string
-  domain: string
-  path: string
-  expires: number
-  size: number
-  httpOnly: boolean
-  session: boolean
-  secure: boolean
-  sameSite: ISameSiteSetting
-}
-
-/**
- * Sub-type of {@link IResponse}.
- *
- * @privateRemarks
- *
- * - Serializable: TRUE
- * - Serialization Format: Avro
- *
- * @beta
- */
-export interface IResponsePage {
-  url: string
-  viewport?: IViewport
-  content: string
-  cookies: ICookie[]
-  title: string
-}
-
-/**
- * Possible HTTP-Header values.
- *
- * @privateRemarks
- *
- * @beta
- */
-type IHeaders = Record<string, string>
-
-/**
- * Possible HTTP-Method values.
- *
- * @privateRemarks
- *
- * @beta
- */
-type IHttpMethod =
-  | 'GET'
-  | 'POST'
-  | 'PATCH'
-  | 'PUT'
-  | 'DELETE'
-  | 'OPTIONS'
-
-/**
- * Possible HTTP-Request Resource-types.
- *
- * @privateRemarks
- *
- * @beta
- */
-type IResourceType =
-| 'document'
-| 'stylesheet'
-| 'image'
-| 'media'
-| 'font'
-| 'script'
-| 'texttrack'
-| 'xhr'
-| 'fetch'
-| 'eventsource'
-| 'websocket'
-| 'manifest'
-| 'other'
-
-/**
- * Sub-type of {@link IResponse}.
- *
- * @privateRemarks
- *
- * - Serializable: TRUE
- * - Serialization Format: Avro
- *
- * @beta
- */
-export interface IResponseRequest {
-  headers: IHeaders
-  isNavigationRequest: boolean
-  method: IHttpMethod
-  postData: any
-  resourceType: IResourceType
-  url: string
-  redirectChain: IResponseRequest[]
-}
-
-/**
- * Security-details for {@link IResponseResponse}
- *
- * @privateRemarks
- *
- * @beta
- */
-interface ISecurityDetails {
-  issuer: string
-  validTo: number
-  protocol: string
-  validFrom: number
-  subjectName: string
-}
-
-/**
- * Sub-type of {@link IResponse}.
- *
- * @privateRemarks
- *
- * - Serializable: TRUE
- * - Serialization Format: Avro
- *
- * @beta
- */
-export interface IResponseResponse {
-  request: IResponseRequest
-  url: string
-  status: number
-  statusText: string
-  headers: IHeaders
-  securityDetails: ISecurityDetails
-  fromCache: boolean
-  fromServiceWorker: boolean
-  text: string
+export interface IResponseMeta {
+  timestamp: number
+  username: string
 }

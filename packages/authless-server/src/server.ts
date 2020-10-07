@@ -1,15 +1,16 @@
-import * as authless from '@authless/core'
+import * as common from '@authless/common'
+import * as core from '@authless/core'
 import * as http from 'http'
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 import { PuppeteerExtraPlugin } from 'puppeteer-extra'
 import { v4 as uuidv4 } from 'uuid'
 
 export interface IServerConfig {
-  domainPathRouter: authless.DomainPathRouter
-  botRouter: authless.BotRouter
-  puppeteerParams: authless.PuppeteerParams
+  domainPathRouter: core.DomainPathRouter
+  botRouter: core.BotRouter
+  puppeteerParams: common.PuppeteerParams
   puppeteerPlugins?: PuppeteerExtraPlugin[]
-  proxy?: authless.ProxyConfig
+  proxy?: common.ProxyConfig
 }
 
 /**
@@ -30,11 +31,11 @@ export interface IServerConfig {
  * @beta
  */
 export class Server {
-  domainPathRouter: authless.DomainPathRouter
-  botRouter: authless.BotRouter
-  puppeteerParams?: authless.PuppeteerParams
+  domainPathRouter: core.DomainPathRouter
+  botRouter: core.BotRouter
+  puppeteerParams?: common.PuppeteerParams
   puppeteerPlugins?: PuppeteerExtraPlugin[]
-  proxy?: authless.ProxyConfig
+  proxy?: common.ProxyConfig
 
   /**
    * Create a Authless server instance
@@ -94,7 +95,7 @@ export class Server {
       // get bot when username is provided
       if (typeof username === 'string') {
         selectedBot = this.botRouter.getBotByUsername(username)
-        if (selectedBot instanceof authless.AnonBot) {
+        if (selectedBot instanceof core.AnonBot) {
           throw new Error(`unable to find bot with username ${username}`)
         }
       }
@@ -120,7 +121,7 @@ export class Server {
           await page.setViewport(this.puppeteerParams?.viewPort)
         }
 
-        let responseFormat: authless.URLParams['responseFormat'] = 'json'
+        let responseFormat: common.URLParams['responseFormat'] = 'json'
         if (urlParams?.responseFormat === 'png') {
           responseFormat = urlParams?.responseFormat
         }
@@ -156,9 +157,8 @@ export class Server {
             .end('Can only handle responseFormat of type json or png')
         }
       } catch (err) {
-        console.log(`Authless-server: scrape(): error = ${(err as Error).message}`)
+        console.log(err.stack)
         const screenshotPath = `/tmp/${uuidv4() as string}.png`
-        console.log('saving error screenshot ...')
         await page.screenshot({path: screenshotPath})
         console.log(`saved error screenshot to: ${screenshotPath}`)
         expressResponse.status(501).send('Server Error').end()
