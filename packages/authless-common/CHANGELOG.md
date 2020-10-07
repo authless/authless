@@ -1,3 +1,10 @@
+## [@authless/common-v2.1.0](https://github.com/authless/authless/compare/@authless/common-v2.0.0...@authless/common-v2.1.0) (2020-10-07)
+
+
+### Features
+
+* **common:** refactor core => common ([50a3219](https://github.com/authless/authless/commit/50a3219100b668ec748b6a58255b042d97603a5f))
+
 ## [@authless/common-v2.0.0](https://github.com/authless/authless/compare/@authless/common-v1.0.0...@authless/common-v2.0.0) (2020-10-01)
 
 
