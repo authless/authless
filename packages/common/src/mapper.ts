@@ -93,11 +93,21 @@ export const Mapper = {
   },
   response: {
     toObject: async (response: Response): Promise<ISerializedResponse> => {
+      const headers = response.headers()
+      let text: string | null = null
+      // this is a temporary workaround for handling Server-Side Event messages
+      // as `response.text()` will never return
+      if (typeof headers['content-type'] === 'string' && headers['content-type'] === 'text/event-stream') {
+        text = null
+      } else {
+        text = await response.text().catch(() => null)
+      }
+
       return {
         url: response.url(),
         status: response.status(),
         statusText: response.statusText(),
-        headers: response.headers(),
+        headers,
         securityDetails: await (async () => {
           const securityDetails = response.securityDetails()
           if (securityDetails === null) {
@@ -107,7 +117,7 @@ export const Mapper = {
         })(),
         fromCache: response.fromCache(),
         fromServiceWorker: response.fromServiceWorker(),
-        text: await response.text().catch(() => null),
+        text,
         request: await Mapper.request.toObject(response.request()),
       }
     }

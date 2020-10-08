@@ -43,11 +43,21 @@ exports.Mapper = {
     },
     response: {
         toObject: (response) => __awaiter(void 0, void 0, void 0, function* () {
+            const headers = response.headers();
+            let text = null;
+            // this is a temporary workaround for handling Server-Side Event messages
+            // as `response.text()` will never return
+            if (typeof headers['content-type'] === 'string' && headers['content-type'] === 'text/event-stream') {
+                text = null;
+            }
+            else {
+                text = yield response.text().catch(() => null);
+            }
             return {
                 url: response.url(),
                 status: response.status(),
                 statusText: response.statusText(),
-                headers: response.headers(),
+                headers,
                 securityDetails: yield (() => __awaiter(void 0, void 0, void 0, function* () {
                     const securityDetails = response.securityDetails();
                     if (securityDetails === null) {
@@ -57,7 +67,7 @@ exports.Mapper = {
                 }))(),
                 fromCache: response.fromCache(),
                 fromServiceWorker: response.fromServiceWorker(),
-                text: yield response.text().catch(() => null),
+                text,
                 request: yield exports.Mapper.request.toObject(response.request()),
             };
         })
