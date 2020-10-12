@@ -2,8 +2,8 @@
   "name": "@authless/puppeteer-extra-plugin-har",
   "version": "3.11.1",
   "description": "",
-  "main": "dist/index",
-  "types": "dist/index",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "jest --c jest.config.json --maxWorkers=1",
     "test:watch": "npm run test -- --watch",
