@@ -115,6 +115,7 @@ class Server {
                 // initialise the browser
                 const browser = yield selectedBot.launchBrowser({
                     puppeteerParams: this.puppeteerParams,
+                    puppeteerPlugins: this.puppeteerPlugins,
                     proxy: this.proxy
                 });
                 const page = yield browser.newPage();

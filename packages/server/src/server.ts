@@ -103,6 +103,7 @@ export class Server {
       // initialise the browser
       const browser = await selectedBot.launchBrowser({
         puppeteerParams: this.puppeteerParams,
+        puppeteerPlugins: this.puppeteerPlugins,
         proxy: this.proxy
       })
       const page = await browser.newPage()
