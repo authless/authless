@@ -120,14 +120,6 @@ class Server {
                 });
                 const page = yield browser.newPage();
                 try {
-                    yield page.evaluateOnNewDocument(() => {
-                        /* eslint-disable-next-line no-proto */
-                        const newProto = navigator.__proto__;
-                        /* eslint-disable-next-line prefer-reflect */
-                        delete newProto.webdriver;
-                        /* eslint-disable-next-line no-proto */
-                        navigator.__proto__ = newProto;
-                    });
                     if (typeof ((_b = this.puppeteerParams) === null || _b === void 0 ? void 0 : _b.viewPort) !== 'undefined') {
                         yield page.setViewport((_c = this.puppeteerParams) === null || _c === void 0 ? void 0 : _c.viewPort);
                     }

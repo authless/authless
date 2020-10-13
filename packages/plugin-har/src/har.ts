@@ -68,17 +68,16 @@ export class Har extends PuppeteerExtraPlugin {
 
   protected async finishRecording (harId: HarId): Promise<void> {
     const harInstance = this.targetMap.get(harId)
-    if (!(harInstance instanceof PuppeteerHar)) {
-      throw new Error(`Expected to find HAR instance for har id: ${harId}`)
-    }
-    this.targetMap.delete(harId)
-    try {
-      let start = Date.now()
-      const harObject = await harInstance.stop()
-      this.debug(`recorded HAR [ID: ${harId}]. (serialized in ${Date.now() - start}ms)`)
-      await this.harCallback(null, { har: harObject, harId })
-    } catch (error) {
-      await this.harCallback(error, null)
+    if (harInstance instanceof PuppeteerHar) {
+      this.targetMap.delete(harId)
+      try {
+        let start = Date.now()
+        const harObject = await harInstance.stop()
+        this.debug(`recorded HAR [ID: ${harId}]. (serialized in ${Date.now() - start}ms)`)
+        await this.harCallback(null, { har: harObject, harId })
+      } catch (error) {
+        await this.harCallback(error, null)
+      }
     }
   }
 
