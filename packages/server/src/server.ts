@@ -109,15 +109,6 @@ export class Server {
       const page = await browser.newPage()
 
       try {
-        await page.evaluateOnNewDocument(() => {
-          /* eslint-disable-next-line no-proto */
-          const newProto = (navigator as any).__proto__
-          /* eslint-disable-next-line prefer-reflect */
-          delete newProto.webdriver;
-          /* eslint-disable-next-line no-proto */
-          (navigator as any).__proto__ = newProto
-        })
-
         if (typeof this.puppeteerParams?.viewPort !== 'undefined') {
           await page.setViewport(this.puppeteerParams?.viewPort)
         }
