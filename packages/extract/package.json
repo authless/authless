@@ -1,6 +1,6 @@
 {
   "name": "@authless/extract",
-  "version": "3.11.3",
+  "version": "3.11.4",
   "description": "",
   "main": "dist/index",
   "types": "dist/index",
